@@ -8,7 +8,7 @@ from model import Movie
 from model import connect_to_db, db
 from server import app
 from datetime import datetime
-import re
+#  import re
 
 
 def load_users():
@@ -49,10 +49,11 @@ def load_movies():
     for row in open("seed_data/u.item"):
         row = row.rstrip().split("|")
         movie_id = row[0]  # does this need to be int converted?
-        title_str = row[1]
-        #  split on (, use index 0
+
+        title_str = row[1]  # split on (, use index 0 or split string
         if title_str:
-            title = re.sub(r'\([^)]*\)', '', title_str)
+            title = title_str[:-7]
+            #  title = re.sub(r'\([^)]*\)', '', title_str)
         else:
             title = None
 
@@ -88,11 +89,12 @@ def load_ratings():
 
     # Read u.user file and insert data
     for row in open("seed_data/u.data"):
-        row = row.rstrip().split()  # will this strip extra whitepace or all?
-        rating_id, movie_id, user_id, score = row.split(" ")
-
-        rating = Rating(rating_id=rating_id,
-                        movie_id=movie_id,
+        # row = row.rstrip()
+        # row = row.rstrip().split('/t')  # will this strip extra whitepace or all?
+        print "in for loop"
+        movie_id, user_id, score, timestamp = row.split('\t')  # remove misc?
+        print movie_id
+        rating = Rating(movie_id=movie_id,  # rating_id?
                         user_id=user_id,
                         score=score)
 

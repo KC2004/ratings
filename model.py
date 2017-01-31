@@ -31,7 +31,7 @@ class User(db.Model):
 
 
 class Movie(db.Model):
-    """User of ratings website."""
+    """Movies in ratings website."""
 
     __tablename__ = "movies"
 
@@ -42,13 +42,13 @@ class Movie(db.Model):
     #                                        self.email)
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    title = db.Column(db.String(100), nullable=True)
+    title = db.Column(db.String(100), nullable=True)  # not nullable, add check?
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.String(255), nullable=True)
 
 
 class Rating(db.Model):
-    """User of ratings website."""
+    """Ratings ratings website."""
 
     __tablename__ = "ratings"
 

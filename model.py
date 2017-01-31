@@ -35,6 +35,12 @@ class Movie(db.Model):
 
     __tablename__ = "movies"
 
+    # def __repr__(self):
+    # """Provide helpful representation when printed."""
+
+    # return "<User movie_id=%s =%s>" % (self.user_id,
+    #                                        self.email)
+
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(100), nullable=True)
     released_at = db.Column(db.DateTime, nullable=True)

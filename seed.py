@@ -7,6 +7,8 @@ from model import Movie
 
 from model import connect_to_db, db
 from server import app
+from datetime import datetime
+import re
 
 
 def load_users():
@@ -46,11 +48,22 @@ def load_movies():
     # Read u.user file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip().split("|")
-        # movie_id = row[0]
-        # title = row[1]
-        # released_at = row[2]
-        # imdb_url = row[4]
-        movie_id, title, released_at, imdb_url = row.split("|")
+        movie_id = row[0]  # does this need to be int converted?
+        title_str = row[1]
+        #  split on (, use index 0
+        if title_str:
+            title = re.sub(r'\([^)]*\)', '', title_str)
+        else:
+            title = None
+
+        released_str = row[2]
+        if released_str:
+            released_at = datetime.strptime(released_str, "%d-%b-%Y")
+        else:
+            released_at = None
+
+        imdb_url = row[4]
+        # imdb_url = re.sub(r'\([^)]*\)', '', imdb_url)
 
         movie = Movie(movie_id=movie_id,
                       title=title,
@@ -75,8 +88,8 @@ def load_ratings():
 
     # Read u.user file and insert data
     for row in open("seed_data/u.data"):
-        row = row.rstrip()
-        rating_id, movie_id, user_id, score = row.split("|")
+        row = row.rstrip().split()  # will this strip extra whitepace or all?
+        rating_id, movie_id, user_id, score = row.split(" ")
 
         rating = Rating(rating_id=rating_id,
                         movie_id=movie_id,

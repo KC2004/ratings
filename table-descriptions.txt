@@ -1,0 +1,59 @@
+table-descriptions.txt
+(env) user@pt11:~/src/ratings$ psql ratings
+psql (9.5.5)
+Type "help" for help.
+
+ratings=# \dt
+        List of relations
+ Schema |  Name   | Type  | Owner 
+--------+---------+-------+-------
+ public | movies  | table | user
+ public | ratings | table | user
+ public | users   | table | user
+(3 rows)
+
+
+ratings=# \d ratings
+                              Table "public.ratings"
+  Column   |  Type   |                          Modifiers                          
+-----------+---------+-------------------------------------------------------------
+ rating_id | integer | not null default nextval('ratings_rating_id_seq'::regclass)
+ movie_id  | integer | 
+ user_id   | integer | 
+ score     | integer | 
+Indexes:
+    "ratings_pkey" PRIMARY KEY, btree (rating_id)
+
+
+
+ratings=# \d users
+                                    Table "public.users"
+  Column  |         Type          |                        Modifiers                        
+----------+-----------------------+---------------------------------------------------------
+ user_id  | integer               | not null default nextval('users_user_id_seq'::regclass)
+ email    | character varying(64) | 
+ password | character varying(64) | 
+ age      | integer               | 
+ zipcode  | character varying(15) | 
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (user_id)
+
+SELECT * FROM users;
+ratings=# SELECT * FROM users;
+ user_id |       email       | password | age | zipcode 
+---------+-------------------+----------+-----+---------
+       1 | jessica@gmail.com | mypass   |  29 | 94114
+(1 row)
+
+
+                                         Table "public.movies"
+   Column    |            Type             |                         Modifiers                         
+-------------+-----------------------------+-----------------------------------------------------------
+ movie_id    | integer                     | not null default nextval('movies_movie_id_seq'::regclass)
+ title       | character varying(100)      | 
+ released_at | timestamp without time zone | 
+ imdb_url    | character varying(255)      | 
+Indexes:
+    "movies_pkey" PRIMARY KEY, btree (movie_id)
+
+

@@ -17,38 +17,40 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<User user_id=%s email=%s>" % (self.user_id,
-                                               self.email)
-
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=True)
     password = db.Column(db.String(64), nullable=True)
     age = db.Column(db.Integer, nullable=True)
     zipcode = db.Column(db.String(15), nullable=True)
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<User user_id=%s email=%s>" % (self.user_id,
+                                               self.email)
+
 
 class Movie(db.Model):
-    """Movies in ratings website."""
+    """Movie in ratings website."""
 
     __tablename__ = "movies"
-
-    # def __repr__(self):
-    # """Provide helpful representation when printed."""
-
-    # return "<User movie_id=%s =%s>" % (self.user_id,
-    #                                        self.email)
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(100), nullable=True)  # not nullable, add check?
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.String(255), nullable=True)
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<User movie_id=%s title=%s released_at=%s imdb_url=%s>" % (self.movie_id,
+                                                                           self.title,
+                                                                           self.released_at,
+                                                                           self.imdb_url)
+
 
 class Rating(db.Model):
-    """Ratings ratings website."""
+    """Rating ratings website."""
 
     __tablename__ = "ratings"
 
@@ -57,9 +59,17 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, nullable=True)
     score = db.Column(db.Integer, nullable=True)
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<User rating_id=%s movie_id=%s user_id=%s score=%s>" % (self.rating_id,
+                                                                        self.movie_id,
+                                                                        self.user_id,
+                                                                        self.score)
 
 ##############################################################################
 # Helper functions
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""

@@ -8,7 +8,6 @@ from model import Movie
 from model import connect_to_db, db
 from server import app
 from datetime import datetime
-#  import re
 
 
 def load_users():
@@ -64,7 +63,6 @@ def load_movies():
             released_at = None
 
         imdb_url = row[4]
-        # imdb_url = re.sub(r'\([^)]*\)', '', imdb_url)
 
         movie = Movie(movie_id=movie_id,
                       title=title,
@@ -89,11 +87,7 @@ def load_ratings():
 
     # Read u.user file and insert data
     for row in open("seed_data/u.data"):
-        # row = row.rstrip()
-        # row = row.rstrip().split('/t')  # will this strip extra whitepace or all?
-        print "in for loop"
         movie_id, user_id, score, timestamp = row.split('\t')  # remove misc?
-        print movie_id
         rating = Rating(movie_id=movie_id,  # rating_id?
                         user_id=user_id,
                         score=score)

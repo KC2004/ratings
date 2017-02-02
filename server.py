@@ -31,6 +31,53 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+
+@app.route('/login')
+def login():
+    """Login page"""
+
+    return render_template("login_form.html")
+
+
+@app.route('/login')
+def login_form():
+    """Login form page"""
+
+    email = request.form.get('email')
+    password = request.form.get('pwd')
+    # login page gets email and pwd, then redirects to home page?
+        # if user doesnt exist, go to /register route, and add them to the db?
+# check to see if user exists
+    user_rec = User.query.filter_by(email=email).first()
+
+    if not user_rec:
+        # call other post and add to db?
+        return render_template("register_form.html")
+    else:
+        return redirect("/")
+
+
+@app.route('/register')
+def register_form():
+    """Registration page"""
+
+
+
+    
+
+
+@app.route('/register', methods=["POST"])
+def register_form():
+    """Registration page"""
+
+    # if user does not exist, add to db
+    Users.add_new_user(email, password)
+
+    return redirect("/")
+
+    # return render_template("register_form.html")
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension

@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
-from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
+from flask import Flask, jsonify, render_template, redirect, request, flash, session
 from model import User, Rating, Movie, connect_to_db, db
 
 
@@ -24,6 +24,7 @@ def index():
     # return a
     return render_template("homepage.html")
 
+
 @app.route("/users")
 def user_list():
     """Show list of users."""
@@ -34,26 +35,33 @@ def user_list():
 
 @app.route('/login')
 def login():
-    """Login page"""
+    """Login page shows login form"""
 
     return render_template("login_form.html")
 
 
-@app.route('/login')
+@app.route('/login', methods=["POST"])
 def login_form():
-    """Login form page"""
+    """Handle submission of login form"""
 
     email = request.form.get('email')
     password = request.form.get('pwd')
+    print email, password
     # login page gets email and pwd, then redirects to home page?
         # if user doesnt exist, go to /register route, and add them to the db?
-# check to see if user exists
+
+    # check to see if user exists
     user_rec = User.query.filter_by(email=email).first()
+    print user_rec
+    # TODO: check to see if submitted password matches user_rec.pass in db
 
     if not user_rec:
         # call other post and add to db?
+        # if pwd doessnt match, reload form with alert try again
         return render_template("register_form.html")
+        # return render_template("register_form.html", email=email,password=password )
     else:
+        # TODO: add username and email to flask session to set alert
         return redirect("/")
 
 
@@ -61,13 +69,11 @@ def login_form():
 def register_form():
     """Registration page"""
 
-
-
-    
+    return render_template("register_form.html")
 
 
 @app.route('/register', methods=["POST"])
-def register_form():
+def register_process():
     """Registration page"""
 
     # if user does not exist, add to db

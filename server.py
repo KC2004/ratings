@@ -46,23 +46,31 @@ def login_form():
 
     email = request.form.get('email')
     password = request.form.get('pwd')
-    print email, password
+
     # login page gets email and pwd, then redirects to home page?
         # if user doesnt exist, go to /register route, and add them to the db?
 
     # check to see if user exists
     user_rec = User.query.filter_by(email=email).first()
-    print user_rec
+    print user_rec.password
+    # print user_rec
     # TODO: check to see if submitted password matches user_rec.pass in db
 
     if not user_rec:
         # call other post and add to db?
         # if pwd doessnt match, reload form with alert try again
-        return render_template("register_form.html")
+        # return render_template("register_form.html")
         # return render_template("register_form.html", email=email,password=password )
+        return redirect("/register")
     else:
-        # TODO: add username and email to flask session to set alert
-        return redirect("/")
+        if user_rec.password is not password:
+            flash('your login is incorrect')
+            return redirect('/login')
+        else:
+            # TODO: add username and email to flask session to set alert
+            session['email'] = email
+            flash('You were successfully logged in %s' % session['email'])
+            return redirect("/")
 
 
 @app.route('/register')
@@ -76,12 +84,25 @@ def register_form():
 def register_process():
     """Registration page"""
 
-    # if user does not exist, add to db
-    Users.add_new_user(email, password)
+    email = request.form.get('email')
+    password = request.form.get('pwd')
 
+    # if user does not exist, add to db
+    user = User(email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
+    session['email'] = email
+    flash('You were successfully registered %s.' % session['email'])
     return redirect("/")
 
-    # return render_template("register_form.html")
+
+@app.route('/logout')
+def logout():
+    """Logout clears session"""
+
+    session.clear()
+
+    return redirect("/")
 
 
 if __name__ == "__main__":

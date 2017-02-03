@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
-from flask import Flask, jsonify, render_template, redirect, request, flash, session
+from flask import Flask, jsonify, render_template, redirect, request, flash, session, url_for
 from model import User, Rating, Movie, connect_to_db, db
 
 
@@ -33,6 +33,18 @@ def user_list():
     return render_template("user_list.html", users=users)
 
 
+@app.route("/user_profile")
+def user_profile():
+    """Show user profile."""
+
+    # email = session['email']
+    # user = User.query.filter_by(email=email).first()
+    # user_ratings = Rating.query.filter_by(userid = user.user_id).all()
+    # user_movies = Movie.query.filter_by(user_ratings.movie_id).all()
+    # return render_template("user_profile.html", user=user, movies=user_ratings)
+    return render_template("user_profile.html")
+
+
 @app.route('/login')
 def login():
     """Login page shows login form"""
@@ -52,18 +64,19 @@ def login_form():
 
     # check to see if user exists
     user_rec = User.query.filter_by(email=email).first()
-    print user_rec.password
+
     # print user_rec
     # TODO: check to see if submitted password matches user_rec.pass in db
 
     if not user_rec:
         # call other post and add to db?
         # if pwd doessnt match, reload form with alert try again
-        # return render_template("register_form.html")
+        return render_template("register_form.html")
         # return render_template("register_form.html", email=email,password=password )
-        return redirect("/register")
+        # print(url_for('register_form', email = email, password = password))
+        # return redirect(url_for('register_form', email = email))
     else:
-        if user_rec.password is not password:
+        if user_rec.password != password:
             flash('your login is incorrect')
             return redirect('/login')
         else:
@@ -76,7 +89,10 @@ def login_form():
 @app.route('/register')
 def register_form():
     """Registration page"""
-
+    # email = request.args.get('email')
+    # password = request.args.get('password')
+    # print(email)
+    # print(password)
     return render_template("register_form.html")
 
 
